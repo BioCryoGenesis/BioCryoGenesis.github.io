@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BioCryoGenesis // CYBERSPACE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cyan: #00f0ff;
+      --magenta: #ff00aa;
+      --green: #00ff9f;
+      --bg: #0a0a0f;
+      --card: #12121a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: #e0e0e0;
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Matrix rain */
+    #matrix {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -2;
+      opacity: 0.15;
+    }
+
+    /* Scanlines */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.15) 2px,
+        rgba(0,0,0,0.15) 4px
+      );
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* Subtle grid */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,240,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,240,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 4rem 0 3rem;
+    }
+
+    .glitch {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 900;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      position: relative;
+      text-shadow:
+        0 0 10px var(--cyan),
+        0 0 20px var(--cyan),
+        0 0 40px var(--cyan);
+      animation: glitch 3s infinite;
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .glitch::before {
+      left: 2px;
+      text-shadow: -2px 0 var(--magenta);
+      clip-path: inset(0 0 0 0);
+      animation: glitch-anim 2.5s infinite linear alternate-reverse;
+    }
+    .glitch::after {
+      left: -2px;
+      text-shadow: 2px 0 var(--green);
+      animation: glitch-anim2 3s infinite linear alternate-reverse;
+    }
+
+    @keyframes glitch {
+      0%, 90%, 100% { transform: none; }
+      92% { transform: translate(2px, 1px); }
+      94% { transform: translate(-2px, -1px); }
+      96% { transform: translate(1px, -1px); }
+    }
+
+    @keyframes glitch-anim {
+      0% { clip-path: inset(20% 0 60% 0); }
+      20% { clip-path: inset(50% 0 20% 0); }
+      40% { clip-path: inset(10% 0 70% 0); }
+      60% { clip-path: inset(80% 0 5% 0); }
+      80% { clip-path: inset(30% 0 40% 0); }
+      100% { clip-path: inset(5% 0 80% 0); }
+    }
+
+    @keyframes glitch-anim2 {
+      0% { clip-path: inset(70% 0 10% 0); }
+      20% { clip-path: inset(20% 0 50% 0); }
+      40% { clip-path: inset(40% 0 30% 0); }
+      60% { clip-path: inset(10% 0 70% 0); }
+      80% { clip-path: inset(60% 0 20% 0); }
+      100% { clip-path: inset(30% 0 50% 0); }
+    }
+
+    .tagline {
+      margin-top: 1rem;
+      color: var(--magenta);
+      font-size: 1.1rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    /* Bio */
+    .bio {
+      max-width: 700px;
+      margin: 0 auto 4rem;
+      text-align: center;
+      line-height: 1.7;
+      color: #aaa;
+      border: 1px solid rgba(0,240,255,0.2);
+      padding: 1.5rem;
+      background: rgba(18,18,26,0.7);
+      box-shadow: 0 0 20px rgba(0,240,255,0.1);
+    }
+
+    /* Section titles */
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--green);
+      font-size: 1.6rem;
+      letter-spacing: 3px;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 10px var(--green);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    h2::before {
+      content: "//";
+      color: var(--cyan);
+    }
+
+    /* Project grid */
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(0,240,255,0.25);
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0,240,255,0.1), transparent);
+      transition: 0.5s;
+    }
+
+    .card:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 25px rgba(0,240,255,0.25);
+      transform: translateY(-4px);
+    }
+    .card:hover::before { left: 100%; }
+
+    .card h3 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--cyan);
+      margin-bottom: 0.6rem;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      color: #999;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .card a {
+      color: var(--magenta);
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+    .card a:hover { text-shadow: 0 0 8px var(--magenta); }
+
+    /* Socials */
+    .socials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .socials a {
+      color: var(--cyan);
+      text-decoration: none;
+      border: 1px solid var(--cyan);
+      padding: 0.6rem 1.4rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      transition: all 0.25s;
+    }
+    .socials a:hover {
+      background: var(--cyan);
+      color: #000;
+      box-shadow: 0 0 20px var(--cyan);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 5rem;
+      color: #555;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      .glitch { letter-spacing: 2px; }
+      .container { padding: 1.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+
+  <div class="container">
+    <header>
+      <h1 class="glitch" data-text="BioCryoGenesis">BioCryoGenesis</h1>
+      <p class="tagline">Developer // 3D Artist // Builder</p>
+    </header>
+
+    <div class="bio">
+      <p>
+        Welcome to my corner of the net. I build things that shouldn't work but somehow do.
+        Currently obsessed with systems, low-level stuff, and making the machine obey.
+      </p>
+    </div>
+
+    <section>
+      <h2>PROJECTS</h2>
+      <div class="projects">
+        <!-- Project 1 -->
+        <div class="card">
+          <h3>Project Alpha</h3>
+          <p>A brief description of what this project does and why it's cool. Keep it short and sharp.</p>
+          <a href="https://github.com/yourusername/project-alpha" target="_blank">VIEW SOURCE →</a>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="card">
+          <h3>Project Beta</h3>
+          <p>Another project. Maybe an open-source tool, a game, a CLI, whatever you're proud of.</p>
+          <a href="https://github.com/yourusername/project-beta" target="_blank">VIEW SOURCE →</a>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="card">
+          <h3>Project Gamma</h3>
+          <p>Third project slot. Add as many cards as you want — the grid handles it.</p>
+          <a href="https://github.com/yourusername/project-gamma" target="_blank">VIEW SOURCE →</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>CONNECT</h2>
+      <div class="socials">
+        <a href="https://github.com/yourusername" target="_blank">GITHUB</a>
+        <a href="https://twitter.com/yourhandle" target="_blank">X / TWITTER</a>
+        <a href="https://linkedin.com/in/yourprofile" target="_blank">LINKEDIN</a>
+        <a href="mailto:you@email.com">EMAIL</a>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2026 BioCryoGenesis — RUNNING ON GITHUB PAGES</p>
+    </footer>
+  </div>
+
+  <script>
+    // Lightweight matrix rain
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const letters = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function draw() {
+      ctx.fillStyle = 'rgba(10, 10, 15, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#00ff9f';
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 33);
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
